@@ -66,12 +66,12 @@
   </div>
 
   <script>
-    var sliders = { r: document.getElementById("r"),
+    let sliders = { r: document.getElementById("r"),
                     g: document.getElementById("g"),
                     b: document.getElementById("b") };
 
     function update() {
-      var r = sliders.r.value, g = sliders.g.value, b = sliders.b.value;
+      let r = sliders.r.value, g = sliders.g.value, b = sliders.b.value;
 
       // Push the slider values into the CSS variables. One call repaints the page.
       document.documentElement.style.setProperty("--red",   r);

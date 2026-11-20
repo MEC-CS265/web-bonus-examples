@@ -44,14 +44,14 @@
   </div>
 
   <script>
-    var board    = document.getElementById("board");
-    var title    = document.getElementById("title");
-    var subtitle = document.getElementById("subtitle");
+    let board    = document.getElementById("board");
+    let title    = document.getElementById("title");
+    let subtitle = document.getElementById("subtitle");
 
-    var state = "idle";          // game state machine: idle -> waiting -> ready (or too-soon)
-    var startTime = 0;
-    var bestScore = null;
-    var timer = null;
+    let state = "idle";          // game state machine: idle -> waiting -> ready (or too-soon)
+    let startTime = 0;
+    let bestScore = null;
+    let timer = null;
 
     board.addEventListener("click", function () {
       if (state === "idle") {
@@ -72,7 +72,7 @@
 
       } else if (state === "ready") {
         // The real measurement: now minus start = reaction time in milliseconds
-        var ms = Date.now() - startTime;
+        let ms = Date.now() - startTime;
         if (bestScore === null || ms < bestScore) bestScore = ms;
         state = "idle";
         board.className = "idle";
