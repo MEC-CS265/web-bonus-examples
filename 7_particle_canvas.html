@@ -32,8 +32,8 @@
   <canvas id="sky"></canvas>
 
   <script>
-    var canvas = document.getElementById("sky");
-    var ctx = canvas.getContext("2d");   // ctx = the paintbrush object
+    let canvas = document.getElementById("sky");
+    let ctx = canvas.getContext("2d");   // ctx = the paintbrush object
 
     function resize() {
       canvas.width = window.innerWidth;
@@ -43,8 +43,8 @@
     window.addEventListener("resize", resize);
 
     // Each particle: a position, a velocity, a color. A plain JS object — like a dict.
-    var particles = [];
-    var mouse = { x: null, y: null };
+    let particles = [];
+    let mouse = { x: null, y: null };
 
     function spawn(x, y) {
       particles.push({
@@ -57,7 +57,7 @@
     }
 
     // Fill the screen with starting particles
-    for (var i = 0; i < 120; i++) {
+    for (let i = 0; i < 120; i++) {
       spawn(Math.random() * window.innerWidth, Math.random() * window.innerHeight);
     }
 
@@ -67,7 +67,7 @@
     });
 
     canvas.addEventListener("click", function (e) {
-      for (var i = 0; i < 40; i++) spawn(e.clientX, e.clientY);   // explosion!
+      for (let i = 0; i < 40; i++) spawn(e.clientX, e.clientY);   // explosion!
     });
 
     function animate() {
@@ -76,8 +76,8 @@
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       // 2. Move and redraw every particle
-      for (var i = 0; i < particles.length; i++) {
-        var p = particles[i];
+      for (let i = 0; i < particles.length; i++) {
+        let p = particles[i];
         p.x += p.vx;
         p.y += p.vy;
         ctx.beginPath();
