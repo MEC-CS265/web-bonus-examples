@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Demo 5: The Color Mixer (JS + CSS Variables)</title>
+<style>
+  /* CONCEPT: JavaScript writing values INTO CSS.
+     CSS variables (--var: value) are CSS custom properties.
+     JS can set them with document.documentElement.style.setProperty().
+     Change the variable, and EVERY rule that uses it updates at once. */
+
+  :root {                  /* :root = the whole page's global variables */
+    --red: 90;
+    --green: 120;
+    --blue: 255;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    /* The background IS the three variables. Change them, the page repaints. */
+    background-color: rgb(var(--red), var(--green), var(--blue));
+    transition: background-color 0.15s linear;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .panel {
+    background: rgba(0,0,0,0.55);
+    color: white;
+    padding: 26px 34px;
+    border-radius: 14px;
+    text-align: center;
+  }
+
+  label { display: block; margin: 12px 0 2px; font-size: 14px; }
+  input[type=range] { width: 220px; }
+
+  #hex {
+    font-size: 22px;
+    font-family: "Courier New", monospace;
+    background: rgba(255,255,255,0.15);
+    padding: 4px 12px;
+    border-radius: 6px;
+    display: inline-block;
+    margin-top: 12px;
+  }
+</style>
+</head>
+<body>
+  <div class="panel">
+    <h2>&#127912; Mix any color on Earth</h2>
+
+    <label>Red</label>
+    <input type="range" id="r" min="0" max="255" value="90">
+    <label>Green</label>
+    <input type="range" id="g" min="0" max="255" value="120">
+    <label>Blue</label>
+    <input type="range" id="b" min="0" max="255" value="255">
+
+    <p id="hex">rgb(90, 120, 255)</p>
+    <p style="font-size:12px; color:#bbb">Every color on screen = three numbers from 0 to 255.</p>
+  </div>
+
+  <script>
+    var sliders = { r: document.getElementById("r"),
+                    g: document.getElementById("g"),
+                    b: document.getElementById("b") };
+
+    function update() {
+      var r = sliders.r.value, g = sliders.g.value, b = sliders.b.value;
+
+      // Push the slider values into the CSS variables. One call repaints the page.
+      document.documentElement.style.setProperty("--red",   r);
+      document.documentElement.style.setProperty("--green", g);
+      document.documentElement.style.setProperty("--blue",  b);
+      document.getElementById("hex").textContent = "rgb(" + r + ", " + g + ", " + b + ")";
+    }
+
+    // One listener per slider; all three call the same function
+    sliders.r.addEventListener("input", update);
+    sliders.g.addEventListener("input", update);
+    sliders.b.addEventListener("input", update);
+
+    // TRY CHANGING THIS: add a "surprise me" button that picks three random values
+    // and sets the sliders. Hint: Math.floor(Math.random() * 256).
+  </script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","spa":2}' crossorigin="anonymous"></script>
+</body>
+</html>

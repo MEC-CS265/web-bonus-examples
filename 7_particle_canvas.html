@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Demo 7: Floating Particle Canvas</title>
+<style>
+  /* CONCEPT: JavaScript animation with <canvas> + requestAnimationFrame.
+     <canvas> is a blank drawing surface. JS redraws it ~60 times per second.
+     requestAnimationFrame asks the browser "call my function before the next
+     frame" — that is THE professional way to animate in JS. */
+
+  body {
+    margin: 0;
+    overflow: hidden;              /* no scrollbars, the canvas IS the page */
+    background: #050510;
+  }
+  canvas { display: block; }
+
+  .label {
+    position: fixed;               /* floats above the canvas */
+    top: 24px; left: 0; right: 0;
+    text-align: center;
+    color: rgba(255,255,255,0.85);
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+    pointer-events: none;          /* clicks pass through to the canvas */
+  }
+</style>
+</head>
+<body>
+  <p class="label">Move your mouse. Click to explode. &#10024;</p>
+  <canvas id="sky"></canvas>
+
+  <script>
+    var canvas = document.getElementById("sky");
+    var ctx = canvas.getContext("2d");   // ctx = the paintbrush object
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener("resize", resize);
+
+    // Each particle: a position, a velocity, a color. A plain JS object — like a dict.
+    var particles = [];
+    var mouse = { x: null, y: null };
+
+    function spawn(x, y) {
+      particles.push({
+        x: x, y: y,
+        vx: (Math.random() - 0.5) * 1.6,   // random sideways drift
+        vy: (Math.random() - 0.5) * 1.6,
+        size: Math.random() * 3 + 1,
+        hue: Math.random() * 360           // 0-360 degrees around the color wheel
+      });
+    }
+
+    // Fill the screen with starting particles
+    for (var i = 0; i < 120; i++) {
+      spawn(Math.random() * window.innerWidth, Math.random() * window.innerHeight);
+    }
+
+    canvas.addEventListener("mousemove", function (e) {
+      mouse.x = e.clientX; mouse.y = e.clientY;
+      spawn(e.clientX, e.clientY);         // leave a trail
+    });
+
+    canvas.addEventListener("click", function (e) {
+      for (var i = 0; i < 40; i++) spawn(e.clientX, e.clientY);   // explosion!
+    });
+
+    function animate() {
+      // 1. Wipe the frame with a see-through black wash (creates motion trails)
+      ctx.fillStyle = "rgba(5, 5, 16, 0.15)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // 2. Move and redraw every particle
+      for (var i = 0; i < particles.length; i++) {
+        var p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = "hsl(" + p.hue + ", 100%, 65%)";
+        ctx.fill();
+      }
+
+      // 3. Book the NEXT frame. This is the game loop.
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    // TRY CHANGING THIS: make the trail effect stronger by changing 0.15 to 0.5
+    // in the fillStyle above. Then make particles fall like snow: inside the for
+    // loop add p.vy += 0.01 (gravity!).
+  </script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","spa":2}' crossorigin="anonymous"></script>
+</body>
+</html>

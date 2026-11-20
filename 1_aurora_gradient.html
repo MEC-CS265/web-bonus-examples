@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Demo 1: Living Aurora Background</title>
+<style>
+  /* CONCEPT: CSS @keyframes + animated gradients.
+     A gradient is normally frozen. Animate its POSITION and it comes alive. */
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    /* A gradient needs a shape to be animated by moving where it starts */
+    background: linear-gradient(45deg, #0f0c29, #302b63, #24243e, #302b63, #0f0c29);
+    background-size: 400% 400%;   /* make it BIGGER than the screen so we can slide it */
+    animation: aurora 12s ease infinite;
+  }
+
+  /* @keyframes = a named list of "animation frames" the browser tweens for us */
+  @keyframes aurora {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+  }
+
+  /* Gradient TEXT: make the text transparent and show a gradient through it */
+  h1 {
+    font-size: 64px;
+    background: linear-gradient(90deg, #ff7eb3, #7afcff, #feff9c, #ff7eb3);
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;                 /* the magic: hollow letters, gradient shines through */
+    animation: shine 5s linear infinite;
+  }
+  @keyframes shine {
+    to { background-position: 300% 0; }
+  }
+
+  /* TRY CHANGING THIS: swap the three colors in the body gradient.
+     Some fun sets to paste over the body background:
+       Neon:   linear-gradient(45deg, #ff0080, #ff8c00, #40e0d0, #ff0080)
+       Sunset: linear-gradient(45deg, #ff512f, #dd2476, #ff512f)
+       Matrix: linear-gradient(45deg, #000000, #003b00, #000000)
+     Also try changing 12s to 4s and see what happens. */
+</style>
+</head>
+<body>
+  <div class="hero">
+    <h1>The Web Can Move</h1>
+    <p>Everything on this page is pure CSS. No JavaScript. No images. No libraries.</p>
+    <p>Open this file's &lt;style&gt; block and change the colors &mdash; the animation adapts.</p>
+  </div>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","spa":2}' crossorigin="anonymous"></script>
+</body>
+</html>

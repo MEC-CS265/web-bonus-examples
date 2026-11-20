@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Demo 6: Reaction Time Test (your first game loop)</title>
+<style>
+  /* CONCEPT: JavaScript + time + game state.
+     setTimeout = "do this later". Date.now() = a stopwatch.
+     One click handler, one if/else chain, one real game. */
+
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    color: white;
+    user-select: none;   /* stop accidental text highlighting during play */
+  }
+
+  /* The whole screen is the game board. Its class controls its color. */
+  #board {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.1s;
+  }
+
+  .waiting  { background: #b91d1d; }   /* red = too early */
+  .ready    { background: #1d9e3a; }   /* green = CLICK NOW */
+  .idle     { background: #16305c; }   /* blue = start screen */
+  .too-soon { background: #6b6b00; }
+
+  h1 { margin: 0 0 8px; font-size: 42px; }
+  p  { font-size: 20px; }
+</style>
+</head>
+<body>
+  <!-- TRY CHANGING THIS: make the green light appear after a RANDOM delay between
+       1 and 4 seconds instead of a fixed 2. Hint: Math.random() * 3000 + 1000. -->
+  <div id="board" class="idle">
+    <h1 id="title">Reaction Test</h1>
+    <p id="subtitle">Click anywhere to start. Wait for GREEN. Click again fast.</p>
+  </div>
+
+  <script>
+    var board    = document.getElementById("board");
+    var title    = document.getElementById("title");
+    var subtitle = document.getElementById("subtitle");
+
+    var state = "idle";          // game state machine: idle -> waiting -> ready (or too-soon)
+    var startTime = 0;
+    var bestScore = null;
+    var timer = null;
+
+    board.addEventListener("click", function () {
+      if (state === "idle") {
+        // Round 1: turn red, then schedule the green light
+        state = "waiting";
+        board.className = "waiting";
+        title.textContent = "Wait for green...";
+        subtitle.textContent = "Don't jump the gun.";
+        timer = setTimeout(goGreen, 2000);
+
+      } else if (state === "waiting") {
+        // Clicked too early. clearTimeout CANCELS the scheduled green light.
+        clearTimeout(timer);
+        state = "too-soon";
+        board.className = "too-soon";
+        title.textContent = "\u26A0 Too soon!";
+        subtitle.textContent = "Click to try again.";
+
+      } else if (state === "ready") {
+        // The real measurement: now minus start = reaction time in milliseconds
+        var ms = Date.now() - startTime;
+        if (bestScore === null || ms < bestScore) bestScore = ms;
+        state = "idle";
+        board.className = "idle";
+        title.textContent = ms + " ms \u26A1";
+        subtitle.textContent = "Your best: " + bestScore + " ms. Click to go again. (Average human: ~250 ms)";
+
+      } else {
+        // Recovering from a too-soon click
+        state = "idle";
+        board.className = "idle";
+        title.textContent = "Reaction Test";
+        subtitle.textContent = "Click anywhere to start.";
+      }
+    });
+
+    function goGreen() {
+      state = "ready";
+      board.className = "ready";
+      title.textContent = "CLICK!";
+      startTime = Date.now();    // start the stopwatch at the exact green moment
+    }
+  </script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","spa":2}' crossorigin="anonymous"></script>
+</body>
+</html>

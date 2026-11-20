@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Demo 3: Neon Signup Form (HTML's built-in bouncer)</title>
+<style>
+  /* CONCEPT: HTML forms + BUILT-IN validation.
+     No JavaScript needed yet! The browser itself refuses to submit a bad form.
+     Attributes that do the guarding: required, type=email, minlength, pattern. */
+
+  body {
+    background: radial-gradient(circle at top, #1b2735, #090a0f);
+    font-family: Arial, sans-serif;
+    color: #eef;
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+  }
+
+  form {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 16px;
+    padding: 30px;
+    width: 100%;
+    max-width: 420px;
+    backdrop-filter: blur(8px);   /* frosted glass effect over the gradient */
+  }
+
+  h2 { margin-top: 0; }
+
+  label { display: block; margin: 14px 0 4px; font-size: 14px; }
+
+  input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    border-radius: 8px;
+    border: 2px solid #334;
+    background: #0d1117;
+    color: white;
+    font-size: 15px;
+  }
+
+  /* :valid and :invalid are PSEUDO-CLASSES, like :hover.
+     The browser evaluates them using the validation attributes below. */
+  input:focus { outline: none; border-color: #7afcff; }
+  input:not(:placeholder-shown):invalid { border-color: #ff5470; }
+  input:not(:placeholder-shown):valid   { border-color: #3ef07c; }
+
+  button {
+    margin-top: 20px;
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #090a0f;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #7afcff, #feff9c);
+    cursor: pointer;
+  }
+  button:hover { filter: brightness(1.15); }
+</style>
+</head>
+<body>
+  <!-- Every input here has a "bouncer". Submit the empty form and watch the browser block it.
+       TRY CHANGING THIS: delete the required attribute from the age input and see the difference.
+       Then change pattern="[0-9]+" to pattern="[0-9]{2}" and try to submit a 1-digit age. -->
+  <form action="#" method="get">
+    <h2>Join the Club &#10024;</h2>
+
+    <label>Username (3&ndash;12 letters)</label>
+    <input type="text" name="username" required minlength="3" maxlength="12"
+           pattern="[A-Za-z]+"
+           placeholder="letters only">
+
+    <label>Email</label>
+    <input type="email" name="email" required placeholder="you@example.com">
+
+    <label>Age</label>
+    <input type="number" name="age" required min="13" max="120" placeholder="13+">
+
+    <label>Secret code (hint: it starts with CS)</label>
+    <!-- pattern is a REGULAR EXPRESSION: a text pattern the value must match -->
+    <input type="text" name="code" required pattern="CS.*" placeholder="CS...">
+
+    <button type="submit">Sign Up</button>
+  </form>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","spa":2}' crossorigin="anonymous"></script>
+</body>
+</html>

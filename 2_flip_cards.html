@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Demo 2: 3D Flip Cards</title>
+<style>
+  /* CONCEPT: CSS transitions + transform: rotateY.
+     transition = the browser animates ANY property change smoothly.
+     transform = move/scale/rotate an element in 2D or 3D space. */
+
+  body {
+    background: #111;
+    font-family: Arial, sans-serif;
+    display: flex;
+    gap: 40px;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+  }
+
+  /* The card is a 3D stage: the FRONT and BACK sit on top of each other,
+     and .card gets physically rotated 180deg on hover. */
+  .card {
+    width: 220px;
+    height: 300px;
+    perspective: 900px;   /* how "deep" the 3D looks. Try 200px vs 2000px. */
+    cursor: pointer;
+  }
+  .card-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    /* THE one line that makes it smooth: animate every transform over 0.8s */
+    transition: transform 0.8s;
+  }
+  .card:hover .card-inner {
+    transform: rotateY(180deg);   /* TRY CHANGING THIS: rotateX(180deg) flips it sideways instead */
+  }
+
+  .face {
+    position: absolute;
+    inset: 0;                     /* shorthand for top/right/bottom/left: 0 */
+    backface-visibility: hidden;  /* hide the side facing away from the viewer */
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  .front { background: linear-gradient(135deg, #667eea, #764ba2); }
+  .back  {
+    background: linear-gradient(135deg, #f953c6, #b91d73);
+    transform: rotateY(180deg);   /* pre-rotated so it is ready when the card flips */
+  }
+
+  /* BONUS effect: the profile pic card GROWS on hover using transform: scale */
+  .grow {
+    width: 220px;
+    height: 300px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #11998e, #38ef7d);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 60px;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .grow:hover {
+    transform: scale(1.12) rotate(2deg);   /* TRY: change 1.12 to 2 and 2deg to -10deg */
+    box-shadow: 0 20px 60px rgba(56, 239, 125, 0.5);
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="card-inner">
+      <div class="face front">Hover me &#127876;</div>
+      <div class="face back">3D in CSS!</div>
+    </div>
+  </div>
+
+  <div class="grow">&#128513;</div>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","spa":2}' crossorigin="anonymous"></script>
+</body>
+</html>
